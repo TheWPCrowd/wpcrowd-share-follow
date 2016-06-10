@@ -7,7 +7,7 @@ var autoprefixer = require('gulp-autoprefixer');
 
 
 gulp.task('combine_js', function() {    
-  return gulp.src(['./js/video.js', './js/script.js'])
+  return gulp.src([ './js/script.js', './js/video.js', './js/facbook.js', './js/twitter.js', './js/googleplus.js', './js/whatsapp.js'   ])
     .pipe(concat('scripts.js'))
     .pipe(gulp.dest('./js'));
 });
@@ -36,8 +36,7 @@ gulp.task('minify-js', function () {
 });
 
 gulp.task('default', function() {
-    gulp.watch('./js/video.js', ['combine_js' ]);   
-    gulp.watch('./js/script.js', ['combine_js' ]);
+    gulp.watch([ './js/script.js', './js/video.js', './js/facbook.js', './js/twitter.js', './js/googleplus.js', './js/whatsapp.js' ], ['combine_js' ]);   
     gulp.watch('./js/scripts.js', [ 'minify-js']);
     gulp.watch('./style.css',  ['minify_css']);
 });

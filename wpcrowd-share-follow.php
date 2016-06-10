@@ -158,7 +158,7 @@ class wpcrowdShareFollow {
                     <?php $output = str_replace(array("IMAGE", "URI", "TITLE", "EXCERPT"), array($image, $uri , $title, $excerpt), $this->get_share_url($network)); ?>            
                     <a href="<?php echo $output ?>" target="_blank"  class="icon-<?php echo $network; ?> share-button" data-link="<?php echo $output ?>" data-id="<?php the_ID() ?>">
                         <span><?php echo str_replace("_", " ", $network ); ?></span> 
-                        <small></small>
+                        
                     </a>    
                 </li>
                 <?php endif;
