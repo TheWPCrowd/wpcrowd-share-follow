@@ -1,0 +1,89 @@
+@font-face {
+  font-family: 'wpcrowd';
+  src: url('font/wpcrowd.eot?2285735');
+  src: url('font/wpcrowd.eot?2285735#iefix') format('embedded-opentype'),
+       url('font/wpcrowd.woff2?2285735') format('woff2'),
+       url('font/wpcrowd.woff?2285735') format('woff'),
+       url('font/wpcrowd.ttf?2285735') format('truetype'),
+       url('font/wpcrowd.svg?2285735#wpcrowd') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'wpcrowd';
+    src: url('../font/wpcrowd.svg?2285735#wpcrowd') format('svg');
+  }
+}
+*/
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "wpcrowd";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-instagram:before { content: '\49'; } /* 'I' */
+.icon-facebook:before { content: '\66'; } /* 'f' */
+.icon-googleplus:before { content: '\67'; } /* 'g' */
+.icon-home:before { content: '\68'; } /* 'h' */
+.icon-linkedin:before { content: '\69'; } /* 'i' */
+.icon-pinterest:before { content: '\70'; } /* 'p' */
+.icon-reddit:before { content: '\72'; } /* 'r' */
+.icon-twitter:before { content: '\74'; } /* 't' */
+.icon-whatsapp:before { content: '\77'; } /* 'w' */
+
+
+ [class^="icon-"] span {display:none;}
+ 
+ .shareing-links  {list-style-type: none}
+ .shareing-links a, .shareing-links a:before {color:white}
+ .shareing-links a:hover, .shareing-links a:hover:before {color:#999} 
+ 
+ .shareing-links .icon-facebook:before {  background-color: #0d6fac} 
+ .shareing-links .icon-googleplus:before {  background-color:  #dd4b39}
+ .shareing-links .icon-linkedin:before { background-color: #007bb6 }
+ .shareing-links .icon-soundcloud:before { background-color:#ff3a00 }
+ .shareing-links .icon-instagram:before { background-color: #125688 }
+ .shareing-links .icon-twitter:before { background-color: #0fabc3 }
+ .shareing-links .icon-vimeo:before {background-color: #1ab7ea}
+ .shareing-links .icon-whatsapp:before {background-color: #349603 }
+ .shareing-links .icon-youtube-play:before,
+ .shareing-links .icon-youtube:before { background-color:#bb0000}
+ .shareing-links .icon-pinterest:before {  background-color: #cb2027}
+ .shareing-links .icon-viber:before { background-color: #8f5db7 }
+ .shareing-links .icon-tencent:before { background-color: #6EA6EC }
+ .shareing-links .icon-weibo:before { background-color: #bb3e3e }
+ .shareing-links .icon-wechat:before { background-color: #7bb32e }
+
