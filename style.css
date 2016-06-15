@@ -54,6 +54,11 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
+.show-icon {
+    font-family: 'wpcrowd';
+}
+
+.icon-heart:before { content: '\48'; } /* 'H' */
 .icon-instagram:before { content: '\49'; } /* 'I' */
 .icon-facebook:before { content: '\66'; } /* 'f' */
 .icon-googleplus:before { content: '\67'; } /* 'g' */
@@ -65,25 +70,33 @@
 .icon-whatsapp:before { content: '\77'; } /* 'w' */
 
 
- [class^="icon-"] span {display:none;}
+ [class^="icon-"] span.network {display:none;}
  
  .shareing-links  {list-style-type: none}
  .shareing-links a, .shareing-links a:before {color:white}
  .shareing-links a:hover, .shareing-links a:hover:before {color:#999} 
  
- .shareing-links .icon-facebook:before {  background-color: #0d6fac} 
- .shareing-links .icon-googleplus:before {  background-color:  #dd4b39}
- .shareing-links .icon-linkedin:before { background-color: #007bb6 }
- .shareing-links .icon-soundcloud:before { background-color:#ff3a00 }
- .shareing-links .icon-instagram:before { background-color: #125688 }
- .shareing-links .icon-twitter:before { background-color: #0fabc3 }
- .shareing-links .icon-vimeo:before {background-color: #1ab7ea}
- .shareing-links .icon-whatsapp:before {background-color: #349603 }
- .shareing-links .icon-youtube-play:before,
- .shareing-links .icon-youtube:before { background-color:#bb0000}
- .shareing-links .icon-pinterest:before {  background-color: #cb2027}
- .shareing-links .icon-viber:before { background-color: #8f5db7 }
- .shareing-links .icon-tencent:before { background-color: #6EA6EC }
- .shareing-links .icon-weibo:before { background-color: #bb3e3e }
- .shareing-links .icon-wechat:before { background-color: #7bb32e }
+ .net-facebook, .shareing-links .icon-facebook:before {  background-color: #0d6fac} 
+ .net-googleplus, .shareing-links .icon-googleplus:before {  background-color:  #dd4b39}
+ .net-linkedin, .shareing-links .icon-linkedin:before { background-color: #007bb6 }
+ .net-soundcloud,.shareing-links .icon-soundcloud:before { background-color:#ff3a00 }
+ .net-instagram, .shareing-links .icon-instagram:before { background-color: #125688 }
+ .net-twitter, .shareing-links .icon-twitter:before { background-color: #0fabc3 }
+ .net-vimeo,.shareing-links .icon-vimeo:before {background-color: #1ab7ea}
+ .net-whatsapp, .shareing-links .icon-whatsapp:before {background-color: #349603 }
+ .net-youtube-play, .shareing-links .icon-youtube-play:before,
+ .net-youtube, .shareing-links .icon-youtube:before { background-color:#bb0000}
+ .net-pinterest, .shareing-links .icon-pinterest:before {  background-color: #cb2027}
+ .net-viber, .shareing-links .icon-viber:before { background-color: #8f5db7 }
+ 
+ 
+ .engagement .show-icon{ color: #E6BE8A }
+ .engagement small {font-size:8px; text-transform: uppercase}
+ .engagement span.count {padding-left: 3px}
 
+ .shareing-links li {width:58px; text-align: center; height:58px; margin: 0; }
+ .shareing-links li.engagement {color:#000}
+ .shareing-links a {display:block; height:100%; text-decoration: none !important; padding-top: 5px}
+ .shareing-links a:before {text-decoration: none !important; }
+ .shareing-links a small {display: block; margin-top: -3px}
+ .clean {clear:both}

@@ -9,23 +9,31 @@ class wpcrowdShareFollowGoogleStats {
     
     protected $transient_name = "gplusc";
     
-    function __contstruct($url = false){
-        if ($url === false){
+    
+    function __construct($id = false,$url = false){
+        error_log('construct');
+        if ($url == false || $id == false){
             return 0;
         }
 
-        $count = '';
+        $count = '';                
+        
+        $cache = get_transient($this->transient_name . $id);
+        
+        if($cache !== false){
+            $count = $cache;
+        
+        }else{
+            $count = $this->ask_google( $url );
+            
+            set_transient($this->transient_name. $id, $count, 60*30);
+        }
 
-        if(parse_url($url, PHP_URL_HOST) == parse_url(get_bloginfo('url'), PHP_URL_HOST)){        
-            $cache = get_transient($this->transient_name . parse_url($url, PHP_URL_PATH));
-            if($cache !== false){
-                $count = $cache;
-            }else{
-                $count = ask_google( $url );
-                set_transient($this->transient_name.parse_url($url, PHP_URL_PATH), $count, 60*30);
-            }
-        }    
-        return $count;    
+        $this->count = $count;    
+    }
+    
+    function return_count(){
+        return $this->count;
     }
 
 
@@ -33,7 +41,7 @@ class wpcrowdShareFollowGoogleStats {
         $contents = file_get_contents( 
             'https://plusone.google.com/_/+1/fastbutton?url=' 
             . urlencode( $url ) 
-        );
+        );                
 
         preg_match( '/window\.__SSR = {c: ([\d]+)/', $contents, $matches );
 

@@ -33,7 +33,7 @@
   if($(".show-count .net-facebook").length){ 
     $(".show-count .net-facebook").each(function(index){
       if(!$(this).closest("div").hasClass("dont-show-count")){
-          url = $(this).attr("data-link");
+          url = $(this).attr("data-url");
           ajaxGetFacebookCurrentCount(url, index);                                      
       }  
     }); 

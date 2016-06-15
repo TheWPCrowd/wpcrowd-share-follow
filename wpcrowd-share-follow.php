@@ -49,10 +49,20 @@ class wpcrowdShareFollow {
     
     private function __construct() {
        $this->options = get_option($this->options_name);
-       // $this->options = false;
-//       if($this->options === false){
-//           $this->set_defaults();
-//       }
+       
+       add_action( 'rest_api_init', function () {
+            register_rest_route( 'wpcrowd/v1', '/share-stats/', array(
+                'methods' => 'GET',
+                'callback' => array($this,'get_share_stats'),
+            ) );
+        } );
+
+        add_action( 'rest_api_init', function () {
+            register_rest_route( 'wpcrowd/v1', '/tweet-add/(?P<id>\d+)/(?P<nonce>\s+)', array(
+                'methods' => 'GET',
+                'callback' => array($this,'add_to_twitter_count'),
+            ) );
+        } );
        
        
        add_action("admin_menu", array($this, "admin_menu"));
@@ -64,23 +74,18 @@ class wpcrowdShareFollow {
        add_shortcode( 'bartag', array($this, "quote_shortcode" ) );
     }
     
-//    protected function set_defaults(){
-//        $this->options = array(
-//                "cache_bust"    => 'no',
-//                "production"     => "no",
-//                "youtube_count" => "yes",
-//                "google_api"    => '',
-//                "share_enabled_networks" => array (
-//                    "facebook"      => "yes",
-//                    "twitter"       => "yes",
-//                    "googleplus"    => "yes",
-//                    "whatsapp"      => "yes",
-//                    "linkedin"      => "yes",
-//                    "pinterest"     => "yes",
-//                ),                
-//            );
-//        update_option($this->option_name, $this->options);
-//    }
+    function get_share_stats(WP_REST_Request $request){
+        $params  = $request->get_params();
+        
+        $shareStatsGeneral = new wpcrowdShareFollowStatsGeneral($params['nonce']);
+        if( $shareStatsGeneral->get_success() ) {
+            return $shareStatsGeneral->get_stats($params['id'], $params['slug']);
+        }else{
+            return $shareStatsGeneral->get_reply();
+        }                        
+    }
+
+
             
     function admin_menu(){
         add_menu_page( 'Share and Follow', 
@@ -105,11 +110,8 @@ class wpcrowdShareFollow {
             wp_enqueue_script('crowd-share-follow-script',  plugins_url( "js/scripts". $prod .".js",__FILE__) , array('jquery'), $this->cache_bust("/js/scripts{$prod}.js"), 1 );
             
             $args = array(
-                'ajax_url'          => admin_url( 'admin-ajax.php' ) ,
-                'nonce'             => wp_create_nonce( $this->nonce ),
-                'ajax_callback'     => "get_googleplus",
-                'google_api'        => $this->options['google_api'],
-                'youtube_count'     => $this->options['youtube_count'],                
+                'stats_url'          => get_bloginfo('url') . "/wp-json/wpcrowd/v1/share-stats/" ,
+                'nonce'             => wp_create_nonce( $this->nonce ),                
             );
             
             wp_localize_script( 'crowd-share-follow-script', 'sharesettings', $args );
@@ -120,7 +122,8 @@ class wpcrowdShareFollow {
     function cache_bust($file){
         $bust = null;
         if($this->options['cache_bust'] == 'yes'){
-           $bust =  filemtime( get_template_directory() . $file);
+            
+           $bust =  filemtime( plugins_url(  $file ,__FILE__)  );
         }        
         return $bust;
     }
@@ -151,21 +154,43 @@ class wpcrowdShareFollow {
         $title = urlencode(get_the_title($id));
         $excerpt = get_the_excerpt();
         if (is_array($this->options['share_enabled_networks']) ){
-            ?><ul class="shareing-links <?php echo $count ?>"><?php
+            ?><ul class="shareing-links <?php echo $count ?>" data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>" data-url='http://www.thewpcrowd.com/wordpress/development/turbo-charging-loop/'>
+                <li class='engagement'>
+                    <span class='show-icon'>H</span><span class='count'></span>
+                    <br />
+                    <small>Engagement</small>
+                </li>    
+            <?php
             foreach($this->options['share_enabled_networks'] as $network => $value ):
                 if($value == 'yes'):
-                ?><li class="net-<?php echo $network; ?>">
+                ?><li class="net-<?php echo $network; ?> share-set">
                     <?php $output = str_replace(array("IMAGE", "URI", "TITLE", "EXCERPT"), array($image, $uri , $title, $excerpt), $this->get_share_url($network)); ?>            
-                    <a href="<?php echo $output ?>" target="_blank"  class="icon-<?php echo $network; ?> share-button" data-link="<?php echo $output ?>" data-id="<?php the_ID() ?>">
-                        <span><?php echo str_replace("_", " ", $network ); ?></span> 
-                        
+                    <a href="<?php echo $output ?>" target="_blank"  class="icon-<?php echo $network; ?> share-button"  data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>">
+                        <span class="network"><?php echo str_replace("_", " ", $network ); ?></span>  
+                        <small></small>
                     </a>    
                 </li>
                 <?php endif;
             endforeach; ?>
+                <li class='comment share-set'>
+                    <a href='#comment' class='icon-comment'>
+                        <span class='network'>comment</span>
+                        <small><?php echo $this->comment_count($id); ?></small>                        
+                    </a>
+                </li>
             </ul><?php 
+        }        
+    }
+    
+    protected function comment_count($id = false){
+        if($id === false){
+            $id = get_the_ID();
         }
-        
+        $count = get_comments_number( $id );
+        if($count > 0){
+            return $count;
+        }
+        return;
     }
 
     protected function get_share_url($net){
@@ -270,6 +295,7 @@ function wpcrowdShareFollowUninstall(){
 
 function wpcrowd_author_follow(){
     $array_of_possible_social_networks = array(
+        "bio" => "bio",
         "url" => "home",
         "twitter" => "twitter",
         'facebook' => 'facebook',
@@ -289,9 +315,12 @@ function wpcrowd_author_follow(){
                     case 'whatsapp':
                         $value = "tel:" . $value;
                         break;
+                    case 'bio':
+                        $value = get_author_posts_url( get_the_author_meta( 'ID' ));
+                        break;
                 }
                 
-                ?><li><a target="_blank" class="icon-<?php echo $icon ?>" href="<?php echo $value ?>"><span><?php echo $net ?></span></a></li><?php
+                ?><li><a target="_blank" class="icon-<?php echo $icon ?>" href="<?php echo $value ?>"><span class="network"><?php echo $net ?></span></a></li><?php
             }
         }
     ?></ul><?php
