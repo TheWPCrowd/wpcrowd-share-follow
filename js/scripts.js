@@ -87,7 +87,7 @@
         
         checkFB : function(){
             if($(".show-count .net-facebook").length){                 
-                url = $(".show-count .net-facebook a").attr("data-url");                
+                url = $(".show-count .net-facebook a").attr("data-link");                
                 shareTools.ajaxGetFacebookCurrentCount(url);                                                        
             }
         },

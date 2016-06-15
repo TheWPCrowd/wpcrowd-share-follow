@@ -154,7 +154,7 @@ class wpcrowdShareFollow {
         $title = urlencode(get_the_title($id));
         $excerpt = get_the_excerpt();
         if (is_array($this->options['share_enabled_networks']) ){
-            ?><ul class="shareing-links <?php echo $count ?>" data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>" data-url='http://www.thewpcrowd.com/wordpress/development/turbo-charging-loop/'>
+            ?><ul class="shareing-links <?php echo $count ?>" data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>" >
                 <li class='engagement'>
                     <span class='show-icon'>H</span><span class='count'></span>
                     <br />
