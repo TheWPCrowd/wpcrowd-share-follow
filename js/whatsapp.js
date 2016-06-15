@@ -1,6 +1,6 @@
 (function($){
     
-    var isMobile = (navigator.userAgent.match(/iPad|iPhone|iPod|Android|android/g) ? true : false );
+ var isMobile = (navigator.userAgent.match(/iPad|iPhone|iPod|Android|android/g) ? true : false );
 
 function iOSversion() {
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
