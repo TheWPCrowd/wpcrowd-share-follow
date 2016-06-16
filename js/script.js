@@ -81,6 +81,9 @@
                shareTools.checkFB();
                shareTools.getServerStats();
                shareTools.getLinkedInStats();
+               if(sharesettings['comments'] != undefined){
+                    shareTools.addShareCountToLink('comments', sharesettings.comments);
+               }
             }
             
         },

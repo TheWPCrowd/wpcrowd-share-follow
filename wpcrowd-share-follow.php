@@ -106,13 +106,22 @@ class wpcrowdShareFollow {
         }
         
         if(!is_admin()){
-            wp_enqueue_style('crowd-share-follow-stylesheet',  plugins_url(  "style". $prod .".css",__FILE__) , array(), $this->cache_bust("/style{$prod}.css") , 'all');
+            wp_enqueue_style('crowd-share-follow-stylesheet',  plugins_url(  "style". $prod .".css",__FILE__) , array('my-theme-main-css'), $this->cache_bust("/style{$prod}.css") , 'all');
+//            if(is_single()){
+//                wp_enqueue_script('dsq-count-scr', '//thewpcrowd.disqus.com/count.js', array(), null, 1);
+//            }
+            
             wp_enqueue_script('crowd-share-follow-script',  plugins_url( "js/scripts". $prod .".js",__FILE__) , array('jquery'), $this->cache_bust("/js/scripts{$prod}.js"), 1 );
             
             $args = array(
                 'stats_url'          => get_bloginfo('url') . "/wp-json/wpcrowd/v1/share-stats/" ,
                 'nonce'             => wp_create_nonce( $this->nonce ),                
             );
+            
+            if(is_single()){
+                global $post;
+                $args['comments'] = $this->comment_count($post->ID);
+            }
             
             wp_localize_script( 'crowd-share-follow-script', 'sharesettings', $args );
             
@@ -154,7 +163,7 @@ class wpcrowdShareFollow {
         $title = urlencode(get_the_title($id));
         $excerpt = get_the_excerpt();
         if (is_array($this->options['share_enabled_networks']) ){
-            ?><ul class="shareing-links <?php echo $count ?>" data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>" >
+            ?><ul class="shareing-links <?php echo $count ?> " data-link="<?php echo get_permalink() ?>" data-id="<?php the_ID() ?>" >
                 <li class='engagement'>
                     <span class='show-icon'>H</span><span class='count'></span>
                     <br />
@@ -172,13 +181,15 @@ class wpcrowdShareFollow {
                 </li>
                 <?php endif;
             endforeach; ?>
-                <li class='comment share-set'>
+                <li class='net-comment share-set'>
                     <a href='#comment' class='icon-comment'>
                         <span class='network'>comment</span>
                         <small><?php echo $this->comment_count($id); ?></small>                        
                     </a>
                 </li>
-            </ul><?php 
+            </ul>
+<div class='clean-small'></div>    
+                <?php 
         }        
     }
     

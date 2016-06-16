@@ -58,8 +58,10 @@
     font-family: 'wpcrowd';
 }
 
+ 
 .icon-heart:before { content: '\48'; } /* 'H' */
 .icon-instagram:before { content: '\49'; } /* 'I' */
+.icon-comment:before { content: '\63'; } /* 'c' */
 .icon-facebook:before { content: '\66'; } /* 'f' */
 .icon-googleplus:before { content: '\67'; } /* 'g' */
 .icon-home:before { content: '\68'; } /* 'h' */
@@ -68,7 +70,6 @@
 .icon-reddit:before { content: '\72'; } /* 'r' */
 .icon-twitter:before { content: '\74'; } /* 't' */
 .icon-whatsapp:before { content: '\77'; } /* 'w' */
-
 
  [class^="icon-"] span.network {display:none;}
  
@@ -88,15 +89,29 @@
  .net-youtube, .shareing-links .icon-youtube:before { background-color:#bb0000}
  .net-pinterest, .shareing-links .icon-pinterest:before {  background-color: #cb2027}
  .net-viber, .shareing-links .icon-viber:before { background-color: #8f5db7 }
+ .net-comment, .shareing-links .icon-comment:before { background-color: #000059 }
+ 
  
  
  .engagement .show-icon{ color: #E6BE8A }
  .engagement small {font-size:8px; text-transform: uppercase}
  .engagement span.count {padding-left: 3px}
 
- .shareing-links li {width:58px; text-align: center; height:58px; margin: 0; }
+ .shareing-links li {width:58px; text-align: center; height:58px; margin: 0; float:left}
  .shareing-links li.engagement {color:#000}
  .shareing-links a {display:block; height:100%; text-decoration: none !important; padding-top: 5px}
  .shareing-links a:before {text-decoration: none !important; }
  .shareing-links a small {display: block; margin-top: -3px}
  .clean {clear:both}
+
+ @media screen and (max-width:1278px){
+     .clean-small {clear:left;}
+     .shareing-links li {
+         margin-right:5px
+     }
+ }
+ @media screen and (min-width:1279px){
+    .shareing-links li  {
+        float:none
+    }
+ }
