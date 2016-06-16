@@ -71,7 +71,7 @@ class wpcrowdShareFollow {
        
        add_filter('user_contactmethods',  array($this, 'modify_contact_methods') );
        
-       add_shortcode( 'bartag', array($this, "quote_shortcode" ) );
+       add_shortcode( 'quote', array($this, "quote_shortcode" ) );
     }
     
     function get_share_stats(WP_REST_Request $request){
@@ -230,8 +230,8 @@ class wpcrowdShareFollow {
  * @return string
  */
  public function quote_shortcode($atts){
-    $a = _rnw_shortcode_atts( array(
-        'via'     =>  $this->options['twitter_via'],
+    $a = shortcode_atts( array(
+        'via'     =>  'thewpcrowd',
         'side'    => 'center',
         'text'    => '',
         'cite'    => '',
@@ -248,7 +248,7 @@ class wpcrowdShareFollow {
         $html .= "<blockquote>$text</blockquote>";
         // setup the $cite if available
         if($cite != ''){
-            $cite_text .= t("by") . " " . $cite;
+            $cite_text .= __("by") . " " . $cite;
             if($url != ''){
                 $html .= "<span class='cite-text'><a href='$url' class='cite-url'>$cite_text</a></span>";
             } else {
@@ -263,20 +263,22 @@ class wpcrowdShareFollow {
         // add the sharing if needed
         if($share == 'true'){                        
             $nid = get_the_ID();
-            $current_url = url(current_path(), array('absolute' => TRUE));
+            $current_url = get_permalink();
             $networks = array(
-                              "facebook" => "http://www.facebook.com/sharer.php?u=".  urlencode( $base_root . "/fbsharing/".$nid."?t=".$text ), 
+                              "facebook" => "http://www.facebook.com/sharer.php?u=".  urlencode( untrailingslashit( get_bloginfo() ) . "/fbsharing/".$nid."?t=".$text ), 
                               "twitter" => "http://twitter.com/share?url=".  urlencode($current_url) ."&text=".urlencode($text).$twitterNameShare , 
-                              'whatsapp' => "whatsapp://send?text=".rawurlencode($text ." : " . get_permalink()) 
+                              'whatsapp' => "whatsapp://send?text=".rawurlencode($text ." : " . $current_url) 
                              );
-            $html .= "<ul class='quote-share'>";
+            $html .= "<ul class='quote-share clearfix'>";
                 foreach ($networks as $net => $link){
                     $netExtention = '';
                     if($net == 'facebook'){
                         $netExtention = '-Quote';
                     }
-                    $html .= "<li><a target='_blank' href='$link' title='".t("Share this quote on ")."$net' class='icon-$net blockquote-icon' data-socialnetwork='".ucfirst($net).$netExtention."'><span>".ucfirst($net)."</span></a></li>";
+                    $html .= "<li><a target='_blank' href='$link' title='".__("Share this quote on ")."$net' class='net-$net icon-$net blockquote-icon' data-socialnetwork='".ucfirst($net).$netExtention."'><span>".ucfirst($net)."</span></a></li>";
+                    
                 }
+            $html .= '<li>share this quote:';    
             $html .= "</ul>";    
         }
     // close everything properly when floated

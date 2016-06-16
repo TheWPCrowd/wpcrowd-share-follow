@@ -71,47 +71,82 @@
 .icon-twitter:before { content: '\74'; } /* 't' */
 .icon-whatsapp:before { content: '\77'; } /* 'w' */
 
- [class^="icon-"] span.network {display:none;}
- 
- .shareing-links  {list-style-type: none}
- .shareing-links a, .shareing-links a:before {color:white}
- .shareing-links a:hover, .shareing-links a:hover:before {color:#999} 
- 
- .net-facebook, .shareing-links .icon-facebook:before {  background-color: #0d6fac} 
- .net-googleplus, .shareing-links .icon-googleplus:before {  background-color:  #dd4b39}
- .net-linkedin, .shareing-links .icon-linkedin:before { background-color: #007bb6 }
- .net-soundcloud,.shareing-links .icon-soundcloud:before { background-color:#ff3a00 }
- .net-instagram, .shareing-links .icon-instagram:before { background-color: #125688 }
- .net-twitter, .shareing-links .icon-twitter:before { background-color: #0fabc3 }
- .net-vimeo,.shareing-links .icon-vimeo:before {background-color: #1ab7ea}
- .net-whatsapp, .shareing-links .icon-whatsapp:before {background-color: #349603 }
- .net-youtube-play, .shareing-links .icon-youtube-play:before,
- .net-youtube, .shareing-links .icon-youtube:before { background-color:#bb0000}
- .net-pinterest, .shareing-links .icon-pinterest:before {  background-color: #cb2027}
- .net-viber, .shareing-links .icon-viber:before { background-color: #8f5db7 }
- .net-comment, .shareing-links .icon-comment:before { background-color: #000059 }
- 
- 
- 
- .engagement .show-icon{ color: #E6BE8A }
- .engagement small {font-size:8px; text-transform: uppercase}
- .engagement span.count {padding-left: 3px}
+[class^="icon-"] span.network {display:none;}
 
- .shareing-links li {width:58px; text-align: center; height:58px; margin: 0; float:left}
- .shareing-links li.engagement {color:#000}
- .shareing-links a {display:block; height:100%; text-decoration: none !important; padding-top: 5px}
- .shareing-links a:before {text-decoration: none !important; }
- .shareing-links a small {display: block; margin-top: -3px}
- .clean {clear:both}
+.shareing-links  {list-style-type: none}
+.shareing-links a, .shareing-links a:before {color:white}
+.shareing-links a:hover, .shareing-links a:hover:before {color:#999} 
 
- @media screen and (max-width:1278px){
-     .clean-small {clear:left;}
-     .shareing-links li {
-         margin-right:5px
-     }
+.quote-share .icon-facebook, 
+.net-facebook, 
+.shareing-links .icon-facebook:before {  background-color: #0d6fac} 
+.net-googleplus, .shareing-links .icon-googleplus:before {  background-color:  #dd4b39}
+.net-linkedin, .shareing-links .icon-linkedin:before { background-color: #007bb6 }
+.net-soundcloud,.shareing-links .icon-soundcloud:before { background-color:#ff3a00 }
+.net-instagram, .shareing-links .icon-instagram:before { background-color: #125688 }
+.quote-share .icon-twitter,
+.net-twitter, 
+.shareing-links .icon-twitter:before { background-color: #0fabc3 }
+.net-vimeo,.shareing-links .icon-vimeo:before {background-color: #1ab7ea}
+.quote-share .icon-whatsapp,
+.net-whatsapp, 
+.shareing-links .icon-whatsapp:before {background-color: #349603 }
+.net-youtube-play, .shareing-links .icon-youtube-play:before,
+.net-youtube, .shareing-links .icon-youtube:before { background-color:#bb0000}
+.net-pinterest, .shareing-links .icon-pinterest:before {  background-color: #cb2027}
+.net-viber, .shareing-links .icon-viber:before { background-color: #8f5db7 }
+.net-comment, .shareing-links .icon-comment:before { background-color: #000059 }
+
+.quote-share a span {display:none}
+ .quote-share a {
+     color:#fff; 
+     border-radius: 50%; 
+     display: inline-block; 
+     line-height: 1.5em; 
+     height: 1.5em; 
+     width:1.5em; 
+     text-align: center;
+     text-decoration: none;
  }
- @media screen and (min-width:1279px){
-    .shareing-links li  {
-        float:none
+  
+.quote-share a:hover {
+      color:#666
+}
+ 
+.quote-share  li {display:inline; float: right; margin-left:10px;  list-style-type: none}
+
+.quote {
+    margin-right: 40px;
+    margin-left: 40px;
+    padding: 30px;
+    border: solid 1px #ccc;
+    border-radius: 9px
+}
+.quote blockquote {
+    border-width: 0;
+    font-style: italic;
+    font-size:3rem;
+}
+
+.engagement .show-icon{ color: #E6BE8A }
+.engagement small {font-size:8px; text-transform: uppercase}
+.engagement span.count {padding-left: 3px}
+
+.shareing-links li {width:58px; text-align: center; height:58px; margin: 0; float:left}
+.shareing-links li.engagement {color:#000}
+.shareing-links a {display:block; height:100%; text-decoration: none !important; padding-top: 5px}
+.shareing-links a:before {text-decoration: none !important; }
+.shareing-links a small {display: block; margin-top: -3px}
+.clean {clear:both}
+
+@media screen and (max-width:1278px){
+    .clean-small {clear:left;}
+    .shareing-links li {
+        margin-right:5px
     }
- }
+}
+@media screen and (min-width:1279px){
+   .shareing-links li  {
+       float:none
+   }
+}
