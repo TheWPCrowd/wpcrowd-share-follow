@@ -45,8 +45,7 @@
         },
         
         updateEngage : function(){
-            total = 0;
-            console.log(shareTools.counts);
+            total = 0;            
             for (var key in shareTools.counts) {
                 total += shareTools.counts[key];
             }
@@ -55,15 +54,15 @@
         
         ajaxGetFacebookCurrentCount : function(url){
     
-            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls="+url;
+            url = url.replace(/.*?:\/\//g, "");
+            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls=http://"+url+",https://"+url;
             
             $.ajax({
               dataType: "json",
               url : fburl,
               success: 
                 function( result ) {
-                  totalshares = 0;
-                  
+                  totalshares = 0;                  
                   for(var url in result) { 
                       
                     if(result[url].total_count !== undefined && parseInt(result[url].total_count) !== totalshares){
@@ -107,7 +106,7 @@
             id = $('.shareing-links').attr("data-id");            
             statsUrl = sharesettings.stats_url +"?id="+ id + "&slug=" + encodeURIComponent(link.pathname) +"&nonce="+sharesettings.nonce
             
-            console.log(statsUrl);
+            
             
             $.ajax({
               dataType: "json",
