@@ -92,7 +92,7 @@ jQuery(window).resize(function(){
                   for(var url in result) { 
                     if(result[url].total_count !== undefined ){
                         thisUrl = String(result[url].url).replace(/.*?:\/\//g, "");
-                        if(urls[thisUrl] !== undefined){
+                        if(urls[thisUrl] !== undefined && urls[thisUrl]['counts'].facebook !== result[url].total_count){
                             urls[thisUrl]['counts'].facebook = urls[thisUrl]['counts'].facebook + result[url].total_count;
                         }else{
                             urls[thisUrl]= {counts:{ facebook : result[url].total_count,comments:0}};
