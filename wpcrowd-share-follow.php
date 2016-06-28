@@ -21,6 +21,8 @@ function wpcrowdsharefollow_autoloader( $class_name ) {
 }
 
 
+
+
 class wpcrowdShareFollow {
     protected $options = array();
     protected $options_name = "wpcrowd-share-follow-options";
@@ -69,17 +71,17 @@ class wpcrowdShareFollow {
        
        add_action('wp_enqueue_scripts', array($this, "scripts_and_styles") );
        
-       add_filter('user_contactmethods',  array($this, 'modify_contact_methods') );
+       //add_filter('user_contactmethods',  array($this, 'modify_contact_methods') );
        
        add_shortcode( 'quote', array($this, "quote_shortcode" ) );
     }
     
     function get_share_stats(WP_REST_Request $request){
         $params  = $request->get_params();
-        
         $shareStatsGeneral = new wpcrowdShareFollowStatsGeneral($params['nonce']);
-        if( $shareStatsGeneral->get_success() ) {
-            return $shareStatsGeneral->get_stats($params['id'], $params['slug']);
+        
+        if( $shareStatsGeneral->get_success() ) {                        
+            return $shareStatsGeneral->get_stats($params['id'], get_permalink($params['id']));
         }else{
             return $shareStatsGeneral->get_reply();
         }                        
@@ -107,9 +109,6 @@ class wpcrowdShareFollow {
         
         if(!is_admin()){
             wp_enqueue_style('crowd-share-follow-stylesheet',  plugins_url(  "style". $prod .".css",__FILE__) , array('my-theme-main-css'), $this->cache_bust("/style{$prod}.css") , 'all');
-//            if(is_single()){
-//                wp_enqueue_script('dsq-count-scr', '//thewpcrowd.disqus.com/count.js', array(), null, 1);
-//            }
             
             wp_enqueue_script('crowd-share-follow-script',  plugins_url( "js/scripts". $prod .".js",__FILE__) , array('jquery'), $this->cache_bust("/js/scripts{$prod}.js"), 1 );
             
@@ -132,7 +131,7 @@ class wpcrowdShareFollow {
         $bust = null;
         if($this->options['cache_bust'] == 'yes'){
             
-           $bust =  filemtime( plugins_url(  $file ,__FILE__)  );
+           $bust =  filemtime( plugin_dir_path( __FILE__ ). $file   );
         }        
         return $bust;
     }
@@ -202,6 +201,18 @@ class wpcrowdShareFollow {
             return $count;
         }
         return;
+    }
+    
+    public function engage($id = false){
+        if(!$id){
+            $id = get_the_ID();
+        }
+        $count = $this->comment_count($id);
+        ?>
+        <div class="engage-count-only hearts" data-id="<?php echo $id ?>" data-link="<?php echo get_permalink($id) ?>" data-share="<?php echo $count; ?>">
+            <span class='show-icon'>H</span>&nbsp;<span class='count'><?php echo $count; ?></span>
+        </div>
+        <?php
     }
 
     protected function get_share_url($net){
@@ -342,6 +353,11 @@ function wpcrowd_author_follow(){
 function wpcrowd_share($id = false, $get_count = true ){
     global $wpcrowdsharefollow;
     $wpcrowdsharefollow->share($id, $get_count);
+}
+
+function wpcrowd_engage($id = false){
+    global $wpcrowdsharefollow;
+    $wpcrowdsharefollow->engage($id);
 }
 
 

@@ -128,7 +128,7 @@
     font-size:3rem;
 }
 
-.engagement .show-icon{ color: #E6BE8A }
+.engage-count-only .show-icon, .engagement .show-icon{ color: #E6BE8A }
 .engagement small {font-size:8px; text-transform: uppercase}
 .engagement span.count {padding-left: 3px}
 
@@ -137,6 +137,9 @@
 .shareing-links a {display:block; height:100%; text-decoration: none !important; padding-top: 5px}
 .shareing-links a:before {text-decoration: none !important; }
 .shareing-links a small {display: block; margin-top: -3px}
+
+.engage-count-only {display:inline; float:right}
+
 .clean {clear:both}
 
 @media screen and (max-width:1278px){

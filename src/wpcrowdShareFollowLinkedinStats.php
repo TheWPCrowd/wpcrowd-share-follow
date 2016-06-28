@@ -33,7 +33,7 @@ class wpcrowdShareFollowLinkedinStats {
             set_transient($this->transient_name. $id, $count, 60*30);
         }
 
-        $this->count = $count;   
+        $this->count = (int)$count;   
     }
     
     function return_count(){
@@ -43,9 +43,9 @@ class wpcrowdShareFollowLinkedinStats {
     function ask_linkedin( $url ){
         $endurl = "https://www.linkedin.com/countserv/count/share?format=json&url={$url}";
         
-        $json = file_get_contents($endurl);
+        $json = wp_remote_get($endurl);
         
-        $array = json_decode($json);
+        $array = json_decode($json, true);
         if(isset($array['count'])){
             return $array['count'];
         } else{

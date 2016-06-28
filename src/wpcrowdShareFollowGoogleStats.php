@@ -11,12 +11,12 @@ class wpcrowdShareFollowGoogleStats {
     
     
     function __construct($id = false,$url = false){
-        error_log('construct');
+        
         if ($url == false || $id == false){
             return 0;
         }
 
-        $count = '';                
+        $count = 0;                
         
         $cache = get_transient($this->transient_name . $id);
         
@@ -29,7 +29,7 @@ class wpcrowdShareFollowGoogleStats {
             set_transient($this->transient_name. $id, $count, 60*30);
         }
 
-        $this->count = $count;    
+        $this->count = (int)$count;    
     }
     
     function return_count(){
@@ -38,7 +38,7 @@ class wpcrowdShareFollowGoogleStats {
 
 
     function ask_google( $url ) {
-        $contents = file_get_contents( 
+        $contents = wp_remote_get( 
             'https://plusone.google.com/_/+1/fastbutton?url=' 
             . urlencode( $url ) 
         );                

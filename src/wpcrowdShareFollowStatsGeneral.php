@@ -18,16 +18,22 @@ class wpcrowdShareFollowStatsGeneral {
     protected $reply = array("success" => false);
     
     function __construct($nonce_text = false){
-         
+          
+//        // forcing success
+//          $this->ok = true;    
+//          $this->reply['success'] = true;
+            
+            
         // checks if nonce is ok
         if($nonce_text === false){
             $this->reply['message']='security fail';
         } 
-        if(wp_verify_nonce( $nonce_text, $this->nonce )){
+        else if(wp_verify_nonce( $nonce_text, $this->nonce )){
             $this->ok = true;    
             $this->reply['success']= true;
-        }
-        $this->reply['message']='security fail';
+        } else {
+            $this->reply['message']='security fail';
+        }    
     }
     
     function add_stat_to_twitter($id){
@@ -47,39 +53,40 @@ class wpcrowdShareFollowStatsGeneral {
         return $count;
     }
     
-    function get_google_share_count($id, $path){
-        $url = untrailingslashit(get_bloginfo('url')) . $path;
+    function get_google_share_count($id, $url){ 
+        
+        
         $wpcrowdShareFollowGoogleStats = new wpcrowdShareFollowGoogleStats($id, $url );
         
         return $wpcrowdShareFollowGoogleStats->return_count();
     }
     
-    function get_linkedin_share_count($id, $path){
-        $url = untrailingslashit(get_bloginfo('url')) . $path;
+    function get_linkedin_share_count($id, $url){    
+        
         $wpcrowdShareFollowlinkedinStats = new wpcrowdShareFollowlinkedinStats($id, $url );
         
         return $wpcrowdShareFollowlinkedinStats->return_count();
     }
     
-    function get_stats($id = false, $path = false){
-        if($id === false || $path === false){
+    function get_stats($id = false, $url = false){
+        if($id === false || $url === false){
             $this->reply['success'] = false;
-            $this->reply['message'] = "path or id missing";                                  
+            $this->reply['message'] = "url or id missing";                                  
             return $this->reply;            
         } 
         $this->reply['data']['twitter'] = $this->get_twitter_share_count($id);
-        $this->reply['data']['googleplus'] = $this->get_google_share_count($id, $path);
-        $this->reply['data']['googleplus'] = $this->get_linkedin_share_count($id, $path);
+        // $this->reply['data']['googleplus'] = $this->get_google_share_count($id, $url);
+        // $this->reply['data']['linkedin'] = $this->get_linkedin_share_count($id, $url);
         
-        $this->reply['message']=untrailingslashit( get_bloginfo('url') ) . $path;
+        $this->reply['message']=  $url;
         return $this->reply;
     }
     
-    function get_success(){
+    public function get_success(){
         return $this->reply['success'];
     }
     
-    function get_reply(){
+    public function get_reply(){
         return $this->reply;
     }
     

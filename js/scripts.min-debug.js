@@ -52,11 +52,9 @@
             $(".engagement .count").text(shareTools.roundUpNumbers(total,2));
         },
         
-        ajaxGetFacebookCurrentCount : function(url){
-    
+        ajaxGetFacebookCurrentCount : function(url){    
             url = url.replace(/.*?:\/\//g, "");
-            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls=http://"+url+",https://"+url;
-            
+            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls=http://"+url+",https://"+url;            
             $.ajax({
               dataType: "json",
               url : fburl,
@@ -64,14 +62,13 @@
                 function( result ) {
                   totalshares = 0;                  
                   for(var url in result) { 
-                      
                     if(result[url].total_count !== undefined && parseInt(result[url].total_count) !== totalshares){
                         totalshares = totalshares + parseInt(result[url].total_count);
                     }
-                  }           
+                  }
                   shareTools.addShareCountToLink("facebook",totalshares);
-              }                       
-            });                   
+              }
+            });
         },
         
         init : function(){
@@ -79,12 +76,11 @@
                shareTools.link = $('.shareing-links').attr("data-link");
                shareTools.checkFB();
                shareTools.getServerStats();
-               shareTools.getLinkedInStats();
+               
                if(sharesettings['comments'] != undefined){
-                    shareTools.addShareCountToLink('comments', sharesettings.comments);
+                    shareTools.addShareCountToLink('comments',  parseInt(sharesettings.comments));
                }
             }
-            
         },
         
         checkFB : function(){
@@ -102,9 +98,9 @@
         
         getServerStats : function(){
             
-            link = shareTools.getLocation(shareTools.link);
+            
             id = $('.shareing-links').attr("data-id");            
-            statsUrl = sharesettings.stats_url +"?id="+ id + "&slug=" + encodeURIComponent(link.pathname) +"&nonce="+sharesettings.nonce
+            statsUrl = sharesettings.stats_url +"?id="+ id + "&nonce="+sharesettings.nonce
             
             
             
@@ -113,13 +109,16 @@
               url : statsUrl ,
               success: 
                 function( result ) {
-                  if(result["data"]['googleplus'] != undefined){
+                  if(result.success = false){
+                      exit;
+                  }  
+                  if(result["data"].hasOwnProperty('googleplus')){
                       shareTools.addShareCountToLink("googleplus",result["data"]['googleplus']);
                   }
-                  if(result["data"]['twitter'] != undefined){
+                  if(result["data"].hasOwnProperty('twitter')){
                       shareTools.addShareCountToLink("googleplus",result["data"]['twitter']);
                   }
-                  if(result["data"]['linkedin'] != undefined){
+                  if(result["data"].hasOwnProperty('linkedin')){
                       shareTools.addShareCountToLink("googleplus",result["data"]['linkedin']);
                   }
               }
@@ -128,21 +127,6 @@
             }); 
         },
         
-        getLinkedInStats : function(){
-            $.ajax({
-              dataType: "json",
-              url : "https://www.linkedin.com/countserv/count/share?format=json&url="+ shareTools.link ,
-              success: 
-                function( result ) {
-                  if(result["count"]!= undefined){
-                      shareTools.addShareCountToLink("linkedin",result["count"]);
-                  }                 
-              
-                }
-            });
-              
-            
-        }
         
         
         
