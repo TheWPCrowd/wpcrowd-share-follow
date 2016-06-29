@@ -208,6 +208,7 @@ class wpcrowdShareFollow {
             $id = get_the_ID();
         }
         $count = $this->comment_count($id);
+        $count = intval( $count );
         ?>
         <div class="engage-count-only hearts" data-id="<?php echo $id ?>" data-link="<?php echo get_permalink($id) ?>" data-share="<?php echo $count; ?>">
             <span class='show-icon'>H</span>&nbsp;<span class='count'><?php echo $count; ?></span>
