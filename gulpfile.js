@@ -35,7 +35,7 @@ gulp.task('minify-js', function () {
     .pipe(gulp.dest('js/'));
 });
 
-gulp.task('default', function() {
+gulp.task('default', ['combine_js', 'minify_css', 'minify-js'], function() {
     gulp.watch([ './js/script.js', './js/whatsapp.js' ], ['combine_js' ]);   
     gulp.watch('./js/scripts.js', [ 'minify-js']);
     gulp.watch('./style.css',  ['minify_css']);
