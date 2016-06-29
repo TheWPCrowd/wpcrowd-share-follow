@@ -1,24 +1,27 @@
-function resizeSharing(){
-        if(jQuery(".shareing-links").length && $(window).width() > 1279 ){
-            cpos = jQuery("div.content").offset();
-            jQuery(".shareing-links").css({"top":cpos.top, "left" : (cpos.left - 63)}); 
+(function($){    
+    function resizeSharing(){
+        if($(".shareing-links").length && $(window).width() > 1279 ){
+            cpos = $("div.content").offset();
+            $(".shareing-links").css({"top":cpos.top, "left" : (cpos.left - 63)}); 
         }
     }
     
-resizeSharing();
-
-jQuery(window).resize(function(){
-    resizeSharing();
-});
-    
+    $(window).resize(function(){
+        resizeSharing();
+    });
+     resizeSharing();
      
-(function($){    
+     
+     
+     
+     
      var shareTools = {
         // counts object
         counts : {},
         //
         link :"",
-        // make share numbers look nice        
+        // make share numbers look nice
+        
         roundUpNumbers : function(n,d){ 
             if(n <= 999){
               return n;
@@ -31,9 +34,9 @@ jQuery(window).resize(function(){
 
         addShareCountToLink : function(net, countResult){
             if(countResult === 0){return; }
-            int = shareTools.roundUpNumbers(parseInt(countResult), 2) ;
+            int = shareTools.roundUpNumbers(countResult, 2) ;
             jQuery(".show-count .net-"+net+" .icon-" + net + " small").text(int);
-            shareTools.addShareCountToEngage(net,parseInt(countResult));
+            shareTools.addShareCountToEngage(net,countResult);
         },
         
         addShareCountToEngage : function (net, count){
@@ -42,93 +45,47 @@ jQuery(window).resize(function(){
         },
         
         updateEngage : function(){
-            total = 0;            
+            total = 0;
+            console.log(shareTools.counts);
             for (var key in shareTools.counts) {
                 total += shareTools.counts[key];
             }
             $(".engagement .count").text(shareTools.roundUpNumbers(total,2));
         },
         
-        ajaxGetFacebookCurrentCount : function(url){    
-            url = url.replace(/.*?:\/\//g, "");
-            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls=http://"+url+",https://"+url;            
+        ajaxGetFacebookCurrentCount : function(url){
+    
+            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls="+url;
+            
             $.ajax({
               dataType: "json",
               url : fburl,
               success: 
                 function( result ) {
-                  totalshares = 0;                  
+                  totalshares = 0;
+                  
                   for(var url in result) { 
+                      
                     if(result[url].total_count !== undefined && parseInt(result[url].total_count) !== totalshares){
                         totalshares = totalshares + parseInt(result[url].total_count);
                     }
-                  }
+                  }           
                   shareTools.addShareCountToLink("facebook",totalshares);
-              }
-            });
+              }                       
+            });                   
         },
         
-        ajaxGetFacebookGroupCount : function(){  
-            links = '';
-            counter = 0;
-            urls = {};
-            $(".engage-count-only").each(function(index){
-                if(counter !== 0){
-                    links += ',';
-                }
-                //console.log($(this));
-                url = $(this).attr('data-link').replace(/.*?:\/\//g, "");    
-                links += "http://"+url+",https://"+url;
-                counter ++;
-            }); 
-            
-            fburl = "https://api.facebook.com/restserver.php?method=links.getStats&format=json&urls="+links;            
-            $.ajax({
-              dataType: "json",
-              url : fburl,
-              success: 
-                function( result ) {
-                  totalshares = 0;                  
-                  for(var url in result) { 
-                    if(result[url].total_count !== undefined ){
-                        thisUrl = String(result[url].url).replace(/.*?:\/\//g, "");
-                        if(urls[thisUrl] !== undefined && urls[thisUrl]['counts'].facebook !== result[url].total_count){
-                            urls[thisUrl]['counts'].facebook = urls[thisUrl]['counts'].facebook + result[url].total_count;
-                        }else{
-                            urls[thisUrl]= {counts:{ facebook : result[url].total_count,comments:0}};
-                        }
-                    }
-                  }
-                  shareTools.addShareCountToEngageSpan(urls);
-              }
-            });
-        },
-        addShareCountToEngageSpan :function (urls){
-            console.log(urls);
-            for( url in urls) {
-               working = $(".engage-count-only[data-link='"+ location.protocol +"//" + url +"']");               
-               urls[url].counts.comments = parseInt(working.attr('data-share'));
-               finalcount = 0;
-               for(var networks in urls[url].counts){
-                   finalcount += parseInt(urls[url].counts[networks]);
-               }               
-               working.find("span.count").text(finalcount) ;
-            } 
-        },
         init : function(){
             if($(".shareing-links").length){ 
                shareTools.link = $('.shareing-links').attr("data-link");
                shareTools.checkFB();
                shareTools.getServerStats();
-               
+               shareTools.getLinkedInStats();
                if(sharesettings['comments'] != undefined){
-                    shareTools.addShareCountToLink('comments',  parseInt(sharesettings.comments));
+                    shareTools.addShareCountToLink('comments', sharesettings.comments);
                }
             }
             
-            if($(".engage-count-only").length){ 
-                shareTools.ajaxGetFacebookGroupCount();
-            }
         },
         
         checkFB : function(){
@@ -146,22 +103,17 @@ jQuery(window).resize(function(){
         
         getServerStats : function(){
             
-            
+            link = shareTools.getLocation(shareTools.link);
             id = $('.shareing-links').attr("data-id");            
-            statsUrl = sharesettings.stats_url +"?id="+ id + "&nonce="+sharesettings.nonce
+            statsUrl = sharesettings.stats_url +"?id="+ id + "&slug=" + encodeURIComponent(link.pathname) +"&nonce="+sharesettings.nonce
             
-            
+            console.log(statsUrl);
             
             $.ajax({
               dataType: "json",
               url : statsUrl ,
               success: 
                 function( result ) {
-                  
-                  if(result.success == false || result.success == undefined){
-                      return false; 
-                  }
-                  
                   if(result["data"]['googleplus'] != undefined){
                       shareTools.addShareCountToLink("googleplus",result["data"]['googleplus']);
                   }
@@ -175,13 +127,45 @@ jQuery(window).resize(function(){
                       
                       
             }); 
+        },
+        
+        getLinkedInStats : function(){
+            $.ajax({
+              dataType: "json",
+              url : "https://www.linkedin.com/countserv/count/share?format=json&url="+ shareTools.link ,
+              success: 
+                function( result ) {
+                  if(result["count"]!= undefined){
+                      shareTools.addShareCountToLink("linkedin",result["count"]);
+                  }                 
+              
+                }
+            });
+              
+            
         }
-    };
+        
+        
+        
+        
+        
+        
+        };
      
      shareTools.init();
      
 })(jQuery);
 
+
+
+
+
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 
 
