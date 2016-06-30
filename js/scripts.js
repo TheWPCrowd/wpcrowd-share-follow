@@ -1,5 +1,5 @@
 function resizeSharing(){
-        if(jQuery(".shareing-links").length && $(window).width() > 1279 ){
+        if(jQuery(".shareing-links").length && jQuery(window).width() > 1279 ){
             cpos = jQuery("div.content").offset();
             jQuery(".shareing-links").css({"top":cpos.top, "left" : (cpos.left - 63)}); 
         }
