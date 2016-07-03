@@ -1,8 +1,8 @@
 (function($){    
     function resizeSharing(){
-        if($(".shareing-links").length && $(window).width() > 1279 ){
-            cpos = $("div.content").offset();
-            $(".shareing-links").css({"top":cpos.top, "left" : (cpos.left - 63)}); 
+        if( jQuery(".shareing-links").length && jQuery(window).width() > 1279 ){
+            cpos = jQuery("div.content").offset();
+            jQuery(".shareing-links").css({"top":cpos.top, "left" : (cpos.left - 63)}); 
         }
     }
     
